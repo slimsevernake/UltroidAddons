@@ -48,7 +48,7 @@ async def _(event):
         last_name = "⁪⁬⁮⁮⁮"
     try:
         user_bio = replied_user.about
-    excpet:
+    except:
         user_bio = ""
     await ultroid_bot(functions.account.UpdateProfileRequest(first_name=first_name, last_name=last_name, about=user_bio))
     pfile = await ultroid_bot.upload_file(profile_pic)  # pylint:disable=E060
