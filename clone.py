@@ -50,7 +50,11 @@ async def _(event):
         user_bio = replied_user.about
     except:
         user_bio = ""
-    await ultroid_bot(functions.account.UpdateProfileRequest(first_name=first_name, last_name=last_name, about=user_bio))
+    await ultroid_bot(
+        functions.account.UpdateProfileRequest(
+            first_name=first_name, last_name=last_name, about=user_bio
+        )
+    )
     pfile = await ultroid_bot.upload_file(profile_pic)  # pylint:disable=E060
     await ultroid_bot(functions.photos.UploadProfilePhotoRequest(pfile))
     await eve.delete()
@@ -80,7 +84,9 @@ async def _(event):
             await event.client.get_profile_photos("me", limit=n)
         )
     )
-    await ultroid_bot(functions.account.UpdateProfileRequest(about=bio, first_name=name, last_name=ok))
+    await ultroid_bot(
+        functions.account.UpdateProfileRequest(about=bio, first_name=name, last_name=ok)
+    )
     await eor(event, "Succesfully reverted to your account back !")
     udB.delete(f"{ultroid_bot.uid}01")
     udB.delete(f"{ultroid_bot.uid}02")
