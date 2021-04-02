@@ -17,8 +17,6 @@
 
 """
 
-import html
-
 from telethon.tl import functions
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
@@ -43,21 +41,16 @@ async def _(event):
         return
     user_id = replied_user.user.id
     profile_pic = await event.client.download_profile_photo(user_id)
-    first_name = html.escape(replied_user.user.first_name)
-    if first_name is not None:
-        first_name = first_name.replace("\u2060", "")
-    last_name = replied_user.user.last_name
-    if last_name is not None:
-        last_name = html.escape(last_name)
-        last_name = last_name.replace("\u2060", "")
-    if last_name is None:
+    first_name = replied_user.user.first_name
+    try:
+        last_name = replied_user.user.last_name
+    except:
         last_name = "⁪⁬⁮⁮⁮"
-    user_bio = replied_user.about
-    if user_bio is not None:
+    try:
         user_bio = replied_user.about
-    await ultroid_bot(functions.account.UpdateProfileRequest(first_name=first_name))
-    await ultroid_bot(functions.account.UpdateProfileRequest(last_name=last_name))
-    await ultroid_bot(functions.account.UpdateProfileRequest(about=user_bio))
+    excpet:
+        user_bio = ""
+    await ultroid_bot(functions.account.UpdateProfileRequest(first_name=first_name, last_name=last_name, about=user_bio))
     pfile = await ultroid_bot.upload_file(profile_pic)  # pylint:disable=E060
     await ultroid_bot(functions.photos.UploadProfilePhotoRequest(pfile))
     await eve.delete()
@@ -70,7 +63,7 @@ async def _(event):
 async def _(event):
     name = OWNER_NAME
     ok = ""
-    mybio = str(ultroid_bot.me.id) + "01"
+    mybio = str(ultroid_bot.uid) + "01"
     bio = "Error : Bio Lost"
     chc = udB.get(mybio)
     if chc:
@@ -87,9 +80,7 @@ async def _(event):
             await event.client.get_profile_photos("me", limit=n)
         )
     )
-    await ultroid_bot(functions.account.UpdateProfileRequest(about=bio))
-    await ultroid_bot(functions.account.UpdateProfileRequest(first_name=name))
-    await ultroid_bot(functions.account.UpdateProfileRequest(last_name=ok))
+    await ultroid_bot(functions.account.UpdateProfileRequest(about=bio, first_name=name, last_name=ok))
     await eor(event, "Succesfully reverted to your account back !")
     udB.delete(f"{ultroid_bot.uid}01")
     udB.delete(f"{ultroid_bot.uid}02")
